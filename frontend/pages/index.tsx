@@ -1,46 +1,29 @@
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store';
-import { setData, setLoading, setError } from '../slices/dataSlice';
-import { fetchData } from '../services/api';
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+import Upload from "../components/Upload";
 
-export default function Home() {
-  const dispatch = useDispatch();
-  const { items, loading, error } = useSelector((state: RootState) => state.data);
-  const [page, setPage] = useState<number>(1);
-
-  useEffect(() => {
-    const getData = async () => {
-      dispatch(setLoading(true));
-      try {
-        const data = await fetchData(page);
-        dispatch(setData(data));
-      } catch (error) {
-        dispatch(setError(error.message));
-      } finally {
-        dispatch(setLoading(false));
-      }
-    };
-
-    getData();
-  }, [dispatch, page]);
-
-  const loadMore = () => {
-    setPage((prevPage) => prevPage + 1);
-  };
+const Home = () => {
+  const { items, loading, error } = useSelector(
+    (state: RootState) => state.data
+  );
 
   if (loading) return <p>Carregando...</p>;
   if (error) return <p>Erro: {error}</p>;
 
   return (
-    <div>
-      <h1>Lista dos dados</h1>
-      <ul>
+    <div className="container mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-4 text-center">Lista dos dados</h1>
+      <Upload />
+      <ul className="mt-6">
         {items.map((item, index) => (
-          <li key={index}>{item.name}</li>
+          <li key={index} className="p-4 border-b border-gray-200">
+            {item.name}
+          </li>
         ))}
       </ul>
-      <button onClick={loadMore}>Carregar Mais</button>
     </div>
   );
-}
+};
+
+export default Home;
