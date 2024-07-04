@@ -32,8 +32,11 @@ const Upload = () => {
 
       dispatch(setData(response.data));
     } catch (error) {
-      dispatch(setError(error.message));
-      console.error("Upload Failed:", error);
+      if (error instanceof Error) {
+        dispatch(setError(error.message));
+      } else {
+        dispatch(setError("Um erro desconhecido aconteceu"));
+      }
     } finally {
       dispatch(setLoading(false));
     }
