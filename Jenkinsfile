@@ -2,8 +2,6 @@ pipeline {
     agent any
 
     environment {
-        VERCEL_TOKEN = credentials('vercel-token-id')
-        RENDER_API_KEY = credentials('render-api-key-id')
         DOCKER_HUB_CRED = credentials('docker-hub-credentials')
     }
 
@@ -63,55 +61,6 @@ pipeline {
             }
         }
 
-        stage('Deploy Frontend para o Vercel') {
-            steps {
-                script {
-                    dir('frontend') {
-                        def isWindows = isUnix() ? false : true
-                        if (isWindows) {
-                            bat 'npx vercel --token %VERCEL_TOKEN% --prod'
-                        } else {
-                            sh 'npx vercel --token $VERCEL_TOKEN --prod'
-                        }
-                    }
-                }
-            }
-        }
-
-        stage('Deploy Backend para o Render') {
-            steps {
-                script {
-                    def isWindows = isUnix() ? false : true
-                    if (isWindows) {
-                        withEnv(["RENDER_API_KEY=%RENDER_API_KEY%"]) {
-                            bat '''
-                            curl -X POST -H "Authorization: Bearer %RENDER_API_KEY%" \
-                                -H "Accept: application/json" \
-                                -H "Content-Type: application/json" \
-                                -d '{
-                                    "serviceId": "your-render-service-id",
-                                    "clearCache": false
-                                    }' \
-                                https://api.render.com/v1/services/deploys
-                            '''
-                        }
-                    } else {
-                        withEnv(["RENDER_API_KEY=${env.RENDER_API_KEY}"]) {
-                            sh '''
-                            curl -X POST -H "Authorization: Bearer ${RENDER_API_KEY}" \
-                                -H "Accept: application/json" \
-                                -H "Content-Type: application/json" \
-                                -d '{
-                                    "serviceId": "your-render-service-id",
-                                    "clearCache": false
-                                    }' \
-                                https://api.render.com/v1/services/deploys
-                            '''
-                        }
-                    }
-                }
-            }
-        }
     }
 
     post {
