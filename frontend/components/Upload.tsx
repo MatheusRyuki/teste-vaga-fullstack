@@ -30,7 +30,7 @@ const Upload = () => {
         }
       );
 
-      dispatch(setData(response.data));
+      dispatch(setData(response.data.data));
     } catch (error) {
       if (error instanceof Error) {
         dispatch(setError(error.message));
