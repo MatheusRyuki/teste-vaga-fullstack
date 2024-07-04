@@ -7,7 +7,9 @@ import { Data, DataSchema } from './data/data.schema';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017/bancodedados'),
+    MongooseModule.forRoot(
+      'mongodb+srv://dbUser:dbUserPassword@cluster0.wz70saz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
+    ),
     DataModule,
     MongooseModule.forFeature([{ name: Data.name, schema: DataSchema }]),
   ],
