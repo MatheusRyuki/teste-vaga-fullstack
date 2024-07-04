@@ -70,12 +70,12 @@ pipeline {
                         def isWindows = isUnix() ? false : true
                         if (isWindows) {
                             bat 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
-                            bat 'docker push teste-kronnos-frontend:latest'
-                            bat 'docker push teste-kronnos-backend:latest'
+                            bat 'docker push kronnos-frontend:latest'
+                            bat 'docker push kronnos-backend:latest'
                         } else {
                             sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
-                            sh 'docker push teste-kronnos-frontend:latest'
-                            sh 'docker push teste-kronnos-backend:latest'
+                            sh 'docker push kronnos-frontend:latest'
+                            sh 'docker push kronnos-backend:latest'
                         }
                     }
                 }
