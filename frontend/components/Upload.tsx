@@ -21,7 +21,7 @@ const Upload = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3001/api/upload",
+        "http://localhost:3000/data/upload",
         formData,
         {
           headers: {

@@ -32,34 +32,54 @@ export class DataController {
 
     for (const line of lines) {
       const columns = line.split(',');
+
+      if (columns.length < 27) {
+        continue;
+      }
+
+      const parseString = (value: string): string | null => {
+        const trimmed = value.trim();
+        return trimmed.length > 0 ? trimmed : null;
+      };
+
+      const parseNumber = (value: string): number | null => {
+        const parsed = parseFloat(value.trim());
+        return isNaN(parsed) ? null : parsed;
+      };
+
+      const parseIntNumber = (value: string): number | null => {
+        const parsed = parseInt(value.trim(), 10);
+        return isNaN(parsed) ? null : parsed;
+      };
+
       const dataObject = {
-        nrInst: columns[0].trim(),
-        nrAgencia: columns[1].trim(),
-        cdClient: columns[2].trim(),
-        nmClient: columns[3].trim(),
-        nrCpfCnpj: columns[4].trim(),
-        nrContrato: columns[5].trim(),
-        dtContrato: columns[6].trim(),
-        qtPrestacoes: parseInt(columns[7].trim(), 10),
-        vlTotal: parseFloat(columns[8].trim()),
-        cdProduto: columns[9].trim(),
-        dsProduto: columns[10].trim(),
-        cdCarteira: columns[11].trim(),
-        dsCarteira: columns[12].trim(),
-        nrProposta: columns[13].trim(),
-        nrPresta: columns[14].trim(),
-        tpPresta: columns[15].trim(),
-        nrSeqPre: columns[16].trim(),
-        dtVctPre: columns[17].trim(),
-        vlPresta: parseFloat(columns[18].trim()),
-        vlMora: parseFloat(columns[19].trim()),
-        vlMulta: parseFloat(columns[20].trim()),
-        vlOutAcr: parseFloat(columns[21].trim()),
-        vlIof: parseFloat(columns[22].trim()),
-        vlDescon: parseFloat(columns[23].trim()),
-        vlAtual: parseFloat(columns[24].trim()),
-        idSituac: columns[25].trim(),
-        idSitVenc: columns[26].trim(),
+        nrInst: parseString(columns[0]),
+        nrAgencia: parseString(columns[1]),
+        cdClient: parseString(columns[2]),
+        nmClient: parseString(columns[3]),
+        nrCpfCnpj: parseString(columns[4]),
+        nrContrato: parseString(columns[5]),
+        dtContrato: parseString(columns[6]),
+        qtPrestacoes: parseIntNumber(columns[7]),
+        vlTotal: parseNumber(columns[8]),
+        cdProduto: parseString(columns[9]),
+        dsProduto: parseString(columns[10]),
+        cdCarteira: parseString(columns[11]),
+        dsCarteira: parseString(columns[12]),
+        nrProposta: parseString(columns[13]),
+        nrPresta: parseString(columns[14]),
+        tpPresta: parseString(columns[15]),
+        nrSeqPre: parseString(columns[16]),
+        dtVctPre: parseString(columns[17]),
+        vlPresta: parseNumber(columns[18]),
+        vlMora: parseNumber(columns[19]),
+        vlMulta: parseNumber(columns[20]),
+        vlOutAcr: parseNumber(columns[21]),
+        vlIof: parseNumber(columns[22]),
+        vlDescon: parseNumber(columns[23]),
+        vlAtual: parseNumber(columns[24]),
+        idSituac: parseString(columns[25]),
+        idSitVenc: parseString(columns[26]),
       };
 
       results.push(dataObject);
