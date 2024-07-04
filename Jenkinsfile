@@ -52,11 +52,11 @@ pipeline {
                 script {
                     def isWindows = isUnix() ? false : true
                     if (isWindows) {
-                        bat 'docker build -t myapp-frontend:latest ./frontend'
-                        bat 'docker build -t myapp-backend:latest ./backend'
+                        bat 'docker build -t kronnos-frontend:latest ./frontend'
+                        bat 'docker build -t kronnos-backend:latest ./backend'
                     } else {
-                        sh 'docker build -t myapp-frontend:latest ./frontend'
-                        sh 'docker build -t myapp-backend:latest ./backend'
+                        sh 'docker build -t kronnos-frontend:latest ./frontend'
+                        sh 'docker build -t kronnos-backend:latest ./backend'
                     }
                 }
             }
