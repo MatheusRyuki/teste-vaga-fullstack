@@ -70,7 +70,7 @@ pipeline {
                         echo "Username do Docker Hub: $DOCKER_USERNAME $DOCKER_PASSWORD"
                         def isWindows = isUnix() ? false : true
                         if (isWindows) {
-                            bat 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+                            bat 'docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%'
                             bat 'docker push kronnos-frontend:latest'
                             bat 'docker push kronnos-backend:latest'
                         } else {
