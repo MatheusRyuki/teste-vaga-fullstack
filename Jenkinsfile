@@ -4,6 +4,7 @@ pipeline {
     environment {
         VERCEL_TOKEN = credentials('vercel-token-id')
         RENDER_API_KEY = credentials('render-api-key-id')
+        DOCKER_HUB_CRED = credentials('docker-hub-credentials')
     }
 
     stages {
@@ -65,15 +66,17 @@ pipeline {
         stage('Push para o Docker Hub') {
             steps {
                 script {
-                    def isWindows = isUnix() ? false : true
-                    if (isWindows) {
-                        bat 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
-                        bat 'docker push teste-kronnos-frontend:latest'
-                        bat 'docker push teste-kronnos-backend:latest'
-                    } else {
-                        sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
-                        sh 'docker push teste-kronnos-frontend:latest'
-                        sh 'docker push teste-kronnos-backend:latest'
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        def isWindows = isUnix() ? false : true
+                        if (isWindows) {
+                            bat 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+                            bat 'docker push teste-kronnos-frontend:latest'
+                            bat 'docker push teste-kronnos-backend:latest'
+                        } else {
+                            sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+                            sh 'docker push teste-kronnos-frontend:latest'
+                            sh 'docker push teste-kronnos-backend:latest'
+                        }
                     }
                 }
             }
