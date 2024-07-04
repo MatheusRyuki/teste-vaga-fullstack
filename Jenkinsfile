@@ -63,26 +63,6 @@ pipeline {
             }
         }
 
-        stage('Push para o Docker Hub') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        echo "Username do Docker Hub: $DOCKER_USERNAME $DOCKER_PASSWORD"
-                        def isWindows = isUnix() ? false : true
-                        if (isWindows) {
-                            bat 'docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%'
-                            bat 'docker push kronnos-frontend:latest'
-                            bat 'docker push kronnos-backend:latest'
-                        } else {
-                            sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
-                            sh 'docker push kronnos-frontend:latest'
-                            sh 'docker push kronnos-backend:latest'
-                        }
-                    }
-                }
-            }
-        }
-
         stage('Deploy Frontend para o Vercel') {
             steps {
                 script {
