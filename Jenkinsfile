@@ -67,6 +67,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        echo "Username do Docker Hub: $DOCKER_USERNAME $DOCKER_PASSWORD"
                         def isWindows = isUnix() ? false : true
                         if (isWindows) {
                             bat 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
