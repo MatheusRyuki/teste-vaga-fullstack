@@ -69,7 +69,7 @@ pipeline {
                     dir('frontend') {
                         def isWindows = isUnix() ? false : true
                         if (isWindows) {
-                            bat 'npx vercel --token $VERCEL_TOKEN --prod'
+                            bat 'npx vercel --token %VERCEL_TOKEN% --prod'
                         } else {
                             sh 'npx vercel --token $VERCEL_TOKEN --prod'
                         }
@@ -83,9 +83,9 @@ pipeline {
                 script {
                     def isWindows = isUnix() ? false : true
                     if (isWindows) {
-                        withEnv(["RENDER_API_KEY=${env.RENDER_API_KEY}"]) {
+                        withEnv(["RENDER_API_KEY=%RENDER_API_KEY%"]) {
                             bat '''
-                            curl -X POST -H "Authorization: Bearer ${RENDER_API_KEY}" \
+                            curl -X POST -H "Authorization: Bearer %RENDER_API_KEY%" \
                                 -H "Accept: application/json" \
                                 -H "Content-Type: application/json" \
                                 -d '{
