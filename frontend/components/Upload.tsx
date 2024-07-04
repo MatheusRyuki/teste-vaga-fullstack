@@ -43,19 +43,27 @@ const Upload = () => {
   };
 
   return (
-    <div className="flex flex-col items-center bg-white p-4 rounded-lg shadow-md w-full max-w-md mx-auto">
+    <div className="flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-full max-w-lg mx-auto mt-6">
+      <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+        Upload de Planilha
+      </h2>
       <input
         type="file"
         accept=".csv"
         onChange={handleFileChange}
-        className="mb-4 p-2 border border-gray-300 rounded-md w-full"
+        className="mb-4 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <button
         onClick={handleUpload}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition duration-300"
       >
-        Faça o upload da planilha
+        Fazer Upload
       </button>
+      {file && (
+        <p className="mt-4 text-sm text-gray-500">
+          Arquivo selecionado: {file.name}
+        </p>
+      )}
     </div>
   );
 };
