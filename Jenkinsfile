@@ -7,74 +7,123 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout do git') {
             steps {
                 git branch: 'main', url: 'https://github.com/MatheusRyuki/teste-vaga-fullstack.git'
             }
         }
 
-        stage('Build Frontend') {
+        stage('Buildar Frontend') {
             steps {
                 dir('frontend') {
-                    sh 'npm install'
-                    sh 'npm run build'
-                }
-            }
-        }
-
-        stage('Build Backend') {
-            steps {
-                dir('backend') {
-                    sh 'npm install'
-                    sh 'npm run build'
-                }
-            }
-        }
-
-        stage('Dockerize') {
-            steps {
-                script {
-                    sh 'docker build -t usuario/frontend:latest ./frontend'
-                    sh 'docker build -t usuario/backend:latest ./backend'
-                }
-            }
-        }
-
-        stage('Push to Docker Hub') {
-            steps {
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
-                        sh 'docker push usuario/frontend:latest'
-                        sh 'docker push usuario/backend:latest'
+                    script {
+                        def isWindows = isUnix() ? false : true
+                        if (isWindows) {
+                            bat 'npm install'
+                            bat 'npm run build'
+                        } else {
+                            sh 'npm install'
+                            sh 'npm run build'
+                        }
                     }
                 }
             }
         }
 
-        stage('Deploy Frontend to Vercel') {
+        stage('Buildar Backend') {
+            steps {
+                dir('backend') {
+                    script {
+                        def isWindows = isUnix() ? false : true
+                        if (isWindows) {
+                            bat 'npm install'
+                            bat 'npm run build'
+                        } else {
+                            sh 'npm install'
+                            sh 'npm run build'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Criar a Imagem Docker') {
+            steps {
+                script {
+                    def isWindows = isUnix() ? false : true
+                    if (isWindows) {
+                        bat 'docker build -t myapp-frontend:latest ./frontend'
+                        bat 'docker build -t myapp-backend:latest ./backend'
+                    } else {
+                        sh 'docker build -t myapp-frontend:latest ./frontend'
+                        sh 'docker build -t myapp-backend:latest ./backend'
+                    }
+                }
+            }
+        }
+
+        stage('Push para o Docker Hub') {
+            steps {
+                script {
+                    def isWindows = isUnix() ? false : true
+                    if (isWindows) {
+                        bat 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+                        bat 'docker push teste-kronnos-frontend:latest'
+                        bat 'docker push teste-kronnos-backend:latest'
+                    } else {
+                        sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+                        sh 'docker push teste-kronnos-frontend:latest'
+                        sh 'docker push teste-kronnos-backend:latest'
+                    }
+                }
+            }
+        }
+
+        stage('Deploy Frontend para o Vercel') {
             steps {
                 script {
                     dir('frontend') {
-                        sh 'vercel --prod --token $VERCEL_TOKEN'
+                        def isWindows = isUnix() ? false : true
+                        if (isWindows) {
+                            bat 'npx vercel --token $VERCEL_TOKEN --prod'
+                        } else {
+                            sh 'npx vercel --token $VERCEL_TOKEN --prod'
+                        }
                     }
                 }
             }
         }
 
-        stage('Deploy Backend to Render') {
+        stage('Deploy Backend para o Render') {
             steps {
                 script {
-                    withEnv(["RENDER_API_KEY=${env.RENDER_API_KEY}"]) {
-                        sh '''
-                        curl -X POST -H "Authorization: Bearer ${RENDER_API_KEY}" \
-                             -H "Accept: application/json" \
-                             -H "Content-Type: application/json" \
-                             -d '{
-                                   "serviceId": "your-render-service-id",
-                                   "clearCache": false
-                                 }' \
-                             https://api.render.com/v1/services/deploys
-                        '''
+                    def isWindows = isUnix() ? false : true
+                    if (isWindows) {
+                        withEnv(["RENDER_API_KEY=${env.RENDER_API_KEY}"]) {
+                            bat '''
+                            curl -X POST -H "Authorization: Bearer ${RENDER_API_KEY}" \
+                                -H "Accept: application/json" \
+                                -H "Content-Type: application/json" \
+                                -d '{
+                                    "serviceId": "your-render-service-id",
+                                    "clearCache": false
+                                    }' \
+                                https://api.render.com/v1/services/deploys
+                            '''
+                        }
+                    } else {
+                        withEnv(["RENDER_API_KEY=${env.RENDER_API_KEY}"]) {
+                            sh '''
+                            curl -X POST -H "Authorization: Bearer ${RENDER_API_KEY}" \
+                                -H "Accept: application/json" \
+                                -H "Content-Type: application/json" \
+                                -d '{
+                                    "serviceId": "your-render-service-id",
+                                    "clearCache": false
+                                    }' \
+                                https://api.render.com/v1/services/deploys
+                            '''
+                        }
                     }
                 }
             }
