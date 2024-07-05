@@ -30,7 +30,7 @@ const Home = () => {
             Visualize e gerencie planilhas que foram previamente carregadas.
           </p>
           <Link
-            href="/view"
+            href="/planilhas"
             className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition duration-300 ease-in-out text-center block w-full text-xl font-semibold"
           >
             Ver Planilhas
