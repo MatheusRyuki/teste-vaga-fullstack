@@ -2,10 +2,12 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { setData, setError, setLoading } from "../slices/dataSlice";
+import { useRouter } from "next/router";
 
 const Upload = () => {
   const [file, setFile] = useState<File | null>(null);
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -31,6 +33,8 @@ const Upload = () => {
       );
 
       dispatch(setData(response.data.data));
+
+      router.push("/detalhes");
     } catch (error) {
       if (error instanceof Error) {
         dispatch(setError(error.message));
