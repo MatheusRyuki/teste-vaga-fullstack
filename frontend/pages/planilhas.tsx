@@ -21,14 +21,26 @@ const ViewSheets = () => {
   );
 
   const handleDetailsClick = (spreadsheetId: string) => {
-    const sheetItems = sheets.filter(sheet => sheet.spreadsheetId === spreadsheetId);
+    const sheetItems = sheets.filter(
+      (sheet) => sheet.spreadsheetId === spreadsheetId
+    );
 
     dispatch(setData(sheetItems));
     router.push("/detalhes");
   };
 
-  if (loading) return <p>Carregando planilhas...</p>;
-  if (error) return <p>Erro ao carregar planilhas: {error}</p>;
+  if (loading)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <span className="ml-3 text-gray-600 text-lg">
+          Carregando planilhas...
+        </span>
+      </div>
+    );
+
+  if (error)
+    return <p className="h-screen">Erro ao carregar planilhas: {error}</p>;
 
   return (
     <div className="container mx-auto p-6 h-screen">

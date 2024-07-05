@@ -4,7 +4,7 @@ const Home = () => {
   return (
     <div className="container mx-auto p-4 h-screen flex flex-col justify-center items-center">
       <h1 className="text-4xl font-bold mb-8 text-center text-blue-600">
-        Bem-vindo à sua Aplicação de Gerenciamento de Planilhas
+        Bem-vindo ao Gerenciamento de Planilhas
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="flex flex-col items-center justify-center bg-white shadow-md rounded-lg p-6 w-full">
@@ -12,8 +12,7 @@ const Home = () => {
             Upload de Nova Planilha
           </h2>
           <p className="text-lg text-gray-700 mb-4 text-center">
-            Faça o upload de uma nova planilha para processamento e
-            armazenamento.
+            Faça o upload de uma nova planilha para ser salvo.
           </p>
           <Link
             href="/upload"
@@ -27,7 +26,7 @@ const Home = () => {
             Visualizar Planilhas Anteriores
           </h2>
           <p className="text-lg text-gray-700 mb-4 text-center">
-            Visualize e gerencie planilhas que foram previamente carregadas.
+            Visualize e gerencie planilhas que foram salvas antes.
           </p>
           <Link
             href="/planilhas"

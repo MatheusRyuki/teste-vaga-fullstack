@@ -6,6 +6,8 @@ import { useRouter } from "next/router";
 
 const Upload = () => {
   const [file, setFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -18,12 +20,14 @@ const Upload = () => {
   const handleUpload = async () => {
     if (!file) return;
 
+    setUploading(true);
+
     const formData = new FormData();
     formData.append("file", file);
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/data/upload",
+        "https://teste-vaga-fullstack.onrender.com/data/upload",
         formData,
         {
           headers: {
@@ -43,6 +47,7 @@ const Upload = () => {
       }
     } finally {
       dispatch(setLoading(false));
+      setUploading(false);
     }
   };
 
@@ -59,9 +64,12 @@ const Upload = () => {
       />
       <button
         onClick={handleUpload}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition duration-300"
+        disabled={uploading || !file}
+        className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition duration-300 ${
+          uploading ? "opacity-50 cursor-not-allowed" : ""
+        }`}
       >
-        Fazer Upload
+        {uploading ? "Fazendo Upload..." : "Fazer Upload"}
       </button>
       {file && (
         <p className="mt-4 text-sm text-gray-500">

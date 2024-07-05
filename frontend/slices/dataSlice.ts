@@ -14,7 +14,7 @@ const initialState: DataState = {
 };
 
 export const fetchSheets = createAsyncThunk("data/fetchSheets", async () => {
-  const response = await axios.get("http://localhost:3000/data");
+  const response = await axios.get("https://teste-vaga-fullstack.onrender.com/data");
   return response.data;
 });
 
