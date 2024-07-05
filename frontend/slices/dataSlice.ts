@@ -14,8 +14,14 @@ const initialState: DataState = {
 };
 
 export const fetchSheets = createAsyncThunk("data/fetchSheets", async () => {
-  const response = await axios.get("https://teste-vaga-fullstack.onrender.com/data");
-  return response.data;
+  try {
+    const response = await axios.get(
+      "https://teste-vaga-fullstack.onrender.com/data"
+    );
+    return response.data;
+  } catch {
+    throw new Error("Erro ao buscar as planilhas");
+  }
 });
 
 export const dataSlice = createSlice({

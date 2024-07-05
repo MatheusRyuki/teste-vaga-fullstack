@@ -13,7 +13,7 @@ const ViewSheets = () => {
   } = useSelector((state: RootState) => state.data);
 
   useEffect(() => {
-    dispatch(fetchSheets());
+    dispatch(fetchSheets() as any);
   }, [dispatch]);
 
   const uniqueSpreadsheetIds = Array.from(
