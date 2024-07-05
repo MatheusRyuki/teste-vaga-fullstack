@@ -1,15 +1,22 @@
 import {
   Controller,
+  Get,
   Post,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { DataService } from './data.service';
+import { DataDocument } from './data.schema';
 
 @Controller('data')
 export class DataController {
   constructor(private readonly dataService: DataService) {}
+
+  @Get()
+  async getAllSheets(): Promise<DataDocument[]> {
+    return this.dataService.getAllSheets();
+  }
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))

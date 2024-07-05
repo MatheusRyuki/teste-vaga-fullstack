@@ -191,4 +191,13 @@ export class DataService {
       throw new Error('Erro ao salvar dados no MongoDB');
     }
   }
+
+  async getAllSheets(): Promise<DataDocument[]> {
+    try {
+      const sheets = await this.dataModel.find().exec();
+      return sheets;
+    } catch (error) {
+      throw new Error('Erro ao buscar planilhas');
+    }
+  }
 }

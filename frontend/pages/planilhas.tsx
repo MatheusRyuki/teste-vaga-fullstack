@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store";
-import { fetchSheets } from "../slices/dataSlice";
+import { fetchSheets, setData } from "../slices/dataSlice";
+import router from "next/router";
 
 const ViewSheets = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,13 @@ const ViewSheets = () => {
   const uniqueSpreadsheetIds = Array.from(
     new Set(sheets.map((sheet) => sheet.spreadsheetId))
   );
+
+  const handleDetailsClick = (spreadsheetId: string) => {
+    const sheetItems = sheets.filter(sheet => sheet.spreadsheetId === spreadsheetId);
+
+    dispatch(setData(sheetItems));
+    router.push("/detalhes");
+  };
 
   if (loading) return <p>Carregando planilhas...</p>;
   if (error) return <p>Erro ao carregar planilhas: {error}</p>;
@@ -37,7 +45,10 @@ const ViewSheets = () => {
               <h2 className="text-lg font-bold text-gray-700">
                 ID: {spreadsheetId}
               </h2>
-              <button className="text-blue-600 hover:text-blue-800 flex items-center">
+              <button
+                className="text-blue-600 hover:text-blue-800 flex items-center"
+                onClick={() => handleDetailsClick(spreadsheetId)}
+              >
                 <svg
                   className="w-6 h-6 mr-2"
                   fill="none"
