@@ -9,12 +9,10 @@ export class DataService {
     @InjectModel(Data.name) private readonly dataModel: Model<DataDocument>,
   ) {}
 
-  private formatCurrency(value: string): string {
-    const numberValue = parseFloat(value);
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(numberValue);
+  private generateSpreadsheetId(): string {
+    const timestamp = new Date().getTime();
+    const randomNum = Math.floor(Math.random() * 1000);
+    return timestamp.toString() + randomNum.toString();
   }
 
   private isValidCPF(cpf: string): boolean {
@@ -163,6 +161,8 @@ export class DataService {
   }
 
   async processCsvData(csvData: any[]): Promise<any[]> {
+    const spreadsheetId = this.generateSpreadsheetId();
+
     try {
       const processedData = csvData
         .map((data) => {
@@ -176,6 +176,7 @@ export class DataService {
               nrCpfCnpj: this.validateCpfCnpj(data.nrCpfCnpj),
               dtContrato: this.convertToDate(data.dtContrato),
               dtVctPre: this.convertToDate(data.dtVctPre),
+              spreadsheetId,
             };
           } catch (error) {
             return null;

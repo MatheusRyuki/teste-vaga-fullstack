@@ -83,6 +83,9 @@ export class Data {
 
   @Prop()
   idSitVencimento: string;
+
+  @Prop()
+  spreadsheetId: string;
 }
 
 export type DataDocument = Data & Document;
